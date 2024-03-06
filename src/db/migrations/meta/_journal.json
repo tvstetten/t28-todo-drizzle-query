@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1709722405256,
+      "tag": "0000_lumpy_sunfire",
+      "breakpoints": true
+    }
+  ]
+}
