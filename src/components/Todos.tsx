@@ -31,10 +31,17 @@ const Todos = () => {
   // Function to change the text of a todo item
   const changeTodoText = (id: number, text: string) => {
     // setTodoItems(prev => prev.map(todo => (todo.id === id ? { ...todo, text } : todo)))
-    editTodo(id, text)
     const i = todoItems.findIndex(todo => todo.id === id)
-    if (i >= 0) todoItems[i].text = todoItems[i].text
-    mutate(todoItems, { revalidate: false })
+    if (i >= 0) {
+      mutate(
+        async () => {
+          todoItems[i].text = todoItems[i].text
+          editTodo(id, text)
+          return todoItems
+        },
+        { optimisticData: todoItems, revalidate: false, rollbackOnError: true },
+      )
+    }
   }
 
   // Function to toggle the "done" status of a todo item
