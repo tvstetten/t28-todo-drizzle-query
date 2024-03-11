@@ -1,12 +1,30 @@
-import { getData } from '@/actions/todoActions'
 import Todos from '@/components/Todos'
-import { todoType } from '@/types/todo'
-import useSWR from 'swr'
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
+import { getData } from '@/actions/todoActions'
+import { QUERY_KEY } from '@/types/todo'
 
 export default async function Home() {
-  // load server-side
-  // const dataInfo = await useTodoData()
-  // console.log('Home->data', dataInfo)
+  const queryClient = new QueryClient()
 
-  return <Todos />
+  // Manual server side data loading and transferring to the Server
+  const data = await getData()
+  console.log('🚀 ~ Home ~ data:', data)
+
+  // await queryClient.prefetchQuery({
+  //   queryKey: [QUERY_KEY],
+  //   queryFn: () => {
+  //     console.log('🎇 loading on the server')
+  //     return getData()
+  //   },
+  //   // queryFn: getData,
+  // })
+
+  // Instead do this, which ensures each request has its own cache:
+  return (
+    <>
+      {/* <HydrationBoundary state={dehydrate(queryClient)}> */}
+      <Todos initialData={data} />
+      {/* </HydrationBoundary> */}
+    </>
+  )
 }

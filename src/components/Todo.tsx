@@ -4,9 +4,9 @@ import { ChangeEvent, FC, useState } from 'react'
 
 interface Props {
   todo: todoType
-  changeTodoText: (id: number, text: string) => void
-  toggleIsTodoDone: (id: number, done: boolean) => void
-  deleteTodoItem: (id: number) => void
+  changeTodoText: ({ id, text }: { id: number; text: string }) => void
+  toggleIsTodoDone: ({ id }: { id: number }) => void
+  deleteTodoItem: ({ id }: { id: number }) => void
 }
 
 const Todo: FC<Props> = ({ todo, changeTodoText, toggleIsTodoDone, deleteTodoItem }) => {
@@ -26,7 +26,7 @@ const Todo: FC<Props> = ({ todo, changeTodoText, toggleIsTodoDone, deleteTodoIte
 
   // Event handler for toggling "done" status
   const handleIsDone = async () => {
-    toggleIsTodoDone(todo.id, !isDone)
+    toggleIsTodoDone({ id: todo.id })
     setIsDone(prev => !prev)
   }
 
@@ -37,7 +37,7 @@ const Todo: FC<Props> = ({ todo, changeTodoText, toggleIsTodoDone, deleteTodoIte
 
   // Event handler for saving the edited text
   const handleSave = async () => {
-    changeTodoText(todo.id, text)
+    changeTodoText({ id: todo.id, text })
     setEditing(false)
   }
 
@@ -50,7 +50,7 @@ const Todo: FC<Props> = ({ todo, changeTodoText, toggleIsTodoDone, deleteTodoIte
   // Event handler for deleting a todo item
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this todo?')) {
-      deleteTodoItem(todo.id)
+      deleteTodoItem({ id: todo.id })
     }
   }
 

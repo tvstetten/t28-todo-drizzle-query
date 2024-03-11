@@ -2,11 +2,11 @@
 import { ChangeEvent, FC, useState } from 'react'
 
 interface Props {
-  createTodo: (value: string) => void
+  createTodo: (text: { text: string }) => void
 }
 
 const AddTodo: FC<Props> = ({ createTodo }) => {
-  // State for handling input value
+  // State for handling input text
   const [input, setInput] = useState('')
 
   // Event handler for input change
@@ -16,7 +16,7 @@ const AddTodo: FC<Props> = ({ createTodo }) => {
 
   // Event handler for adding a new todo
   const handleAdd = async () => {
-    createTodo(input)
+    createTodo({ text: input })
     setInput('')
   }
 
@@ -24,6 +24,7 @@ const AddTodo: FC<Props> = ({ createTodo }) => {
   return (
     <div className="w-full flex gap-1 mt-2">
       {/* Input field for entering new todo text */}
+      <label>New todo:</label>
       <input
         type="text"
         className="w-full px-2 py-1 border text-gray-900 border-gray-200 rounded outline-none"

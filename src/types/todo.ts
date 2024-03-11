@@ -3,3 +3,5 @@ export type todoType = {
   text: string
   done: boolean
 }
+
+export const QUERY_KEY = 'api/todos'
