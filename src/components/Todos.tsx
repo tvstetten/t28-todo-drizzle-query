@@ -4,6 +4,7 @@ import Todo from './Todo'
 import AddTodo from './AddTodo'
 import { addTodo, deleteTodo, editTodo, getData, toggleTodo } from '@/actions/todoActions'
 import useSWR from 'swr'
+import { todoType } from '@/types/todo'
 
 const SWR_KEY = 'api/todos'
 
@@ -11,9 +12,19 @@ export const useTodoData = () => {
   return useSWR(SWR_KEY, () => getData())
 }
 
-const Todos = () => {
+const Todos = ({ initialData }: { initialData: todoType[] }) => {
   // State to manage the list of todo items
-  const { data: todoItems, mutate, error, isValidating, isLoading } = useTodoData()
+  const {
+    data: todoItems,
+    mutate,
+    error,
+    isValidating,
+    isLoading,
+  } = useSWR(SWR_KEY, () => getData(), {
+    fallbackData: initialData,
+    refreshInterval: 0,
+    revalidateOnFocus: false,
+  })
   console.log('Todos->todosInfo', todoItems, error, isValidating, isLoading)
 
   if (isLoading || todoItems === undefined) return <div>Loading...</div>
@@ -46,9 +57,6 @@ const Todos = () => {
 
   // Function to toggle the "done" status of a todo item
   const toggleIsTodoDone = (id: number) => {
-    // setTodoItems(prev =>
-    //   prev.map(todo => (todo.id === id ? { ...todo, done: !todo.done } : todo)),
-    // )
     toggleTodo(id)
     // ------------
     // Update only the changed property
